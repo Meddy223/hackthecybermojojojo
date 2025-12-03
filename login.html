@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CyberSim</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md mx-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+            <div class="px-6 py-8">
+                <div class="text-center mb-8">
+                    <i data-feather="shield" class="w-12 h-12 text-primary-500 mx-auto"></i>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white mt-4">Welcome to CyberSim</h1>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Sign in to track your progress and achievements</p>
+                </div>
+
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+                        <input type="text" id="username" name="username" required 
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                        <input type="password" id="password" name="password" required 
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" 
+                                class="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Remember me</label>
+                        </div>
+
+                        <a href="#" class="text-sm text-primary-500 hover:text-primary-600">Forgot password?</a>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Don't have an account? 
+                        <a href="/register" class="text-primary-500 hover:text-primary-600">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+        
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            // Simple validation
+            if (username && password) {
+            // Create user session with progress tracking
+            const userSession = {
+                username,
+                rememberMe,
+                lastLogin: new Date().toISOString(),
+                sessionToken: 'sim_' + Math.random().toString(36).substring(2, 15),
+                xp: 0,
+                completedChallenges: JSON.parse(localStorage.getItem(`user_${username}_progress`))?.completedChallenges || []
+            };
+            
+            localStorage.setItem('currentSession', JSON.stringify(userSession));
+            
+            // Initialize user progress if not exists
+            if (!localStorage.getItem(`user_${username}_progress`)) {
+                localStorage.setItem(`user_${username}_progress`, JSON.stringify({
+                    completedChallenges: [],
+                    firewallProgress: {},
+                    networkProgress: {},
+                    lastActive: new Date().toISOString()
+                }));
+            }
+            
+            // Redirect to dashboard with user progress
+            window.location.href = '/';
+} else {
+                alert('Please enter both username and password');
+            }
+        });
+    </script>
+</body>
+</html>
