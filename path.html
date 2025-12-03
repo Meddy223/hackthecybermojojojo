@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Path | CyberSim Challenge Arena</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#3b82f6',
+                        },
+                        secondary: {
+                            500: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-8">
+        <section class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary-500 dark:text-primary-400 mb-4">Cybersecurity Learning Path</h1>
+            <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+                Follow our structured path to build your cybersecurity skills from the ground up.
+            </p>
+        </section>
+
+        <div class="max-w-4xl mx-auto">
+            <div class="relative">
+                <!-- Vertical line -->
+                <div class="absolute left-4 top-0 w-0.5 h-full bg-gray-300 dark:bg-gray-600"></div>
+                
+                <!-- Path items -->
+                <div class="space-y-8">
+                    <!-- Foundation -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center">
+                            <i data-feather="book" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Foundation</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Learn cybersecurity fundamentals</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">Beginner</span>
+                            </div>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <a href="/challenge-lab.html?id=1" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                    <h4 class="font-medium text-gray-800 dark:text-white">Network Fundamentals</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Understanding networks and protocols</p>
+                                </a>
+                                <a href="/challenge-lab.html?id=2" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                    <h4 class="font-medium text-gray-800 dark:text-white">Security Basics</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Core security principles and concepts</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intermediate -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                            <i data-feather="shield" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Intermediate</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Hands-on security skills</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">Intermediate</span>
+                            </div>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <a href="/firewall-lab.html" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium text-gray-800 dark:text-white">Firewall Configuration Lab</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Hands-on practice with firewall rules</p>
+                                    </div>
+                                    <i data-feather="arrow-right" class="w-5 h-5 text-primary-500"></i>
+                                </a>
+                                <a href="/network-lab.html" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium text-gray-800 dark:text-white">Network Design Lab</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Building resilient network architectures</p>
+                                    </div>
+                                    <i data-feather="arrow-right" class="w-5 h-5 text-primary-500"></i>
+                                </a>
+</div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 w-8 h-8 rounded-full bg-red-500 flex items-center justify-center">
+                            <i data-feather="lock" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Advanced</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Real-world security challenges</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">Advanced</span>
+                            </div>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <a href="/challenge-lab.html?id=3" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium text-gray-800 dark:text-white">Forensic Analysis Lab</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Investigating security incidents</p>
+                                    </div>
+                                    <i data-feather="arrow-right" class="w-5 h-5 text-primary-500"></i>
+                                </a>
+                                <a href="/challenge-lab.html" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium text-gray-800 dark:text-white">Red Team Operations</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Advanced penetration testing</p>
+                                    </div>
+                                    <i data-feather="arrow-right" class="w-5 h-5 text-primary-500"></i>
+                                </a>
+</div>
+                        </div>
+                    </div>
+
+                    <!-- Certification -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
+                            <i data-feather="award" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Certification Prep</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Prepare for industry certifications</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">Expert</span>
+                            </div>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <a href="#" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                    <h4 class="font-medium text-gray-800 dark:text-white">Security+ Practice</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">CompTIA Security+ exam preparation</p>
+                                </a>
+                                <a href="#" class="p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                    <h4 class="font-medium text-gray-800 dark:text-white">CEH Challenges</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Ethical Hacker certification prep</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
