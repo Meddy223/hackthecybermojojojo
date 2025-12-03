@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.code-font {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+}
+
+/* Animation for challenge cards */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+.animate-pulse-slow {
+    animation: pulse 3s infinite;
+}
+
+/* Challenge card status */
+.challenge-status {
+    transition: color 0.3s ease;
+}
+/* Terminal styling */
+.terminal-cursor {
+    animation: blink 1s infinite;
+}
+
+.terminal-input input {
+    caret-color: #3b82f6;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Progress bar animation */
+#progress-bar {
+    transition: width 0.8s ease;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+}
+
+/* Tool buttons */
+.tool-btn {
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.tool-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkpoint notification */
+#checkpoint-notification {
+    transition: all 0.3s ease;
+}
+
+/* Terminal output styling */
+#terminal-content p {
+    line-height: 1.5;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+/* Help section styling */
+#help-section {
+    transition: all 0.3s ease;
+}
+
+#help-section code {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+}
+
+/* Challenge difficulty badges */
+.bg-green-100.dark { background-color: #1a2e22; }
+.bg-yellow-100.dark { background-color: #2e2a4a; }
+.bg-red-100.dark { background-color: #2e1a4a; }
