@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Lab | CyberSim</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-primary-500 dark:text-primary-400">Network Development Lab</h1>
+                <div class="flex items-center space-x-2 mt-2">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">Intermediate</span>
+                    <span class="text-gray-600 dark:text-gray-400">Network Engineering</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="hint-btn" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition flex items-center">
+                    <i data-feather="help-circle" class="w-4 h-4 mr-2"></i> Hint
+                </button>
+                <button id="reset-btn" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition flex items-center">
+                    <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i> Reset Lab
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Network Topology Builder</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="relative h-96 bg-gray-50 dark:bg-gray-700 rounded-md overflow-hidden" id="network-canvas">
+                            <!-- Network devices will be placed here -->
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-gray-400">
+                                <i data-feather="plus-circle" class="w-12 h-12 mx-auto mb-2"></i>
+                                <p>Drag devices from the palette to build your network</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Device Configuration</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">IP Address</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subnet Mask</label>
+                                <input type="text" value="255.255.255.0" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gateway</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                        </div>
+                        <div class="flex space-x-4">
+                            <button class="px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition">Save</button>
+                            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">Test Connection</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Device Palette</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="device-item p-3 border border-gray-200 dark:border-gray-600 rounded cursor-move text-center" draggable="true" data-device="router">
+                                <i data-feather="hard-drive" class="w-8 h-8 text-blue-500 mx-auto"></i>
+                                <p class="text-sm mt-2">Router</p>
+                            </div>
+                            <div class="device-item p-3 border border-gray-200 dark:border-gray-600 rounded cursor-move text-center" draggable="true" data-device="switch">
+                                <i data-feather="share-2" class="w-8 h-8 text-green-500 mx-auto"></i>
+                                <p class="text-sm mt-2">Switch</p>
+                            </div>
+                            <div class="device-item p-3 border border-gray-200 dark:border-gray-600 rounded cursor-move text-center" draggable="true" data-device="server">
+                                <i data-feather="server" class="w-8 h-8 text-purple-500 mx-auto"></i>
+                                <p class="text-sm mt-2">Server</p>
+                            </div>
+                            <div class="device-item p-3 border border-gray-200 dark:border-gray-600 rounded cursor-move text-center" draggable="true" data-device="pc">
+                                <i data-feather="monitor" class="w-8 h-8 text-yellow-500 mx-auto"></i>
+                                <p class="text-sm mt-2">Workstation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Network Objectives</h3>
+                    </div>
+                    <div class="p-6">
+                        <ol class="list-decimal list-inside space-y-3">
+                            <li class="objective" data-id="1">Create a LAN with at least 3 workstations</li>
+                            <li class="objective" data-id="2">Configure a DMZ with web and database servers</li>
+                            <li class="objective" data-id="3">Setup routing between networks</li>
+                            <li class="objective" data-id="4">Test connectivity between all devices</li>
+                        </ol>
+                        <button id="test-network" class="w-full mt-4 px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition">
+                            Validate Network
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Console Output</h3>
+                    </div>
+                    <div class="p-4 h-64 bg-black text-green-400 font-mono text-sm overflow-auto" id="console-output">
+                        <p>Network lab initialized. Ready for configuration.</p>
+                        <p class="text-blue-400">admin@network-lab:~$ _</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+        
+        // Network lab functionality
+        const devices = [];
+        
+        // Drag and drop for network devices
+        document.querySelectorAll('.device-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text/plain', this.dataset.device);
+            });
+        });
+        
+        const canvas = document.getElementById('network-canvas');
+        canvas.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+        
+        canvas.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const deviceType = e.dataTransfer.getData('text/plain');
+            addDeviceToCanvas(deviceType, e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        });
+        
+        function addDeviceToCanvas(type, x, y) {
+            const device = document.createElement('div');
+            device.className = 'absolute w-16 h-16 bg-white dark:bg-gray-600 rounded-lg shadow flex flex-col items-center justify-center cursor-move';
+            device.style.left = `${x - 32}px`;
+            device.style.top = `${y - 32}px`;
+            device.dataset.device = type;
+            
+            let icon = '';
+            let color = '';
+            
+            switch(type) {
+                case 'router':
+                    icon = 'hard-drive';
+                    color = 'blue-500';
+                    break;
+                case 'switch':
+                    icon = 'share-2';
+                    color = 'green-500';
+                    break;
+                case 'server':
+                    icon = 'server';
+                    color = 'purple-500';
+                    break;
+                case 'pc':
+                    icon = 'monitor';
+                    color = 'yellow-500';
+                    break;
+            }
+            
+            device.innerHTML = `
+                <i data-feather="${icon}" class="w-6 h-6 text-${color}"></i>
+                <span class="text-xs mt-1 text-gray-700 dark:text-gray-300">${type}</span>
+            `;
+            
+            device.draggable = true;
+            device.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text/plain', 'move');
+                this.classList.add('opacity-50');
+            });
+            
+            device.addEventListener('dragend', function() {
+                this.classList.remove('opacity-50');
+            });
+            
+            canvas.appendChild(device);
+            devices.push(device);
+            feather.replace();
+            
+            // Remove the placeholder if it exists
+            const placeholder = canvas.querySelector('div.text-center');
+            if (placeholder) {
+                canvas.removeChild(placeholder);
+            }
+            
+            return device;
+        }
+        
+        // Allow moving devices around
+        canvas.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+        
+        canvas.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const action = e.dataTransfer.getData('text/plain');
+            
+            if (action === 'move') {
+                const draggedDevice = document.querySelector('.opacity-50');
+                if (draggedDevice) {
+                    draggedDevice.style.left = `${e.clientX - canvas.getBoundingClientRect().left - 32}px`;
+                    draggedDevice.style.top = `${e.clientY - canvas.getBoundingClientRect().top - 32}px`;
+                }
+            }
+        });
+        
+        // Network validation
+        document.getElementById('test-network').addEventListener('click', () => {
+            validateNetwork();
+        });
+        
+        function validateNetwork() {
+            const consoleOutput = document.getElementById('console-output');
+            const objectives = document.querySelectorAll('.objective');
+            
+            // Clear console
+            consoleOutput.innerHTML = '<p>Testing network configuration...</p>';
+            
+            // Check each objective
+            objectives.forEach(obj => {
+                const id = obj.dataset.id;
+                const text = obj.textContent;
+                let completed = false;
+                
+                switch(id) {
+                    case '1':
+                        // Check for at least 3 workstations
+                        const pcs = devices.filter(d => d.dataset.device === 'pc');
+                        completed = pcs.length >= 3;
+                        consoleOutput.innerHTML += completed ? 
+                            `<p class="text-green-500">✓ LAN has ${pcs.length} workstations</p>` :
+                            `<p class="text-red-500">✗ Need at least 3 workstations (found ${pcs.length})</p>`;
+                        break;
+                        
+                    case '2':
+                        // Check for DMZ with servers
+                        const servers = devices.filter(d => d.dataset.device === 'server');
+                        completed = servers.length >= 2;
+                        consoleOutput.innerHTML += completed ? 
+                            `<p class="text-green-500">✓ DMZ has ${servers.length} servers</p>` :
+                            `<p class="text-red-500">✗ Need at least 2 servers for DMZ (found ${servers.length})</p>`;
+                        break;
+                        
+                    case '3':
+                        // Check for routers
+                        const routers = devices.filter(d => d.dataset.device === 'router');
+                        completed = routers.length >= 1;
+                        consoleOutput.innerHTML += completed ? 
+                            `<p class="text-green-500">✓ Found ${routers.length} routers</p>` :
+                            `<p class="text-red-500">✗ Need at least 1 router for inter-network routing</p>`;
+                        break;
+                        
+                    case '4':
+                        // Check basic connectivity
+                        completed = devices.length >= 4; // At least basic network
+                        consoleOutput.innerHTML += completed ? 
+                            `<p class="text-green-500">✓ Basic connectivity established</p>` :
+                            `<p class="text-red-500">✗ Network too small for proper testing</p>`;
+                        break;
+                }
+                
+                if (completed) {
+                    obj.classList.add('text-green-500');
+                    obj.innerHTML = `<i data-feather="check" class="w-4 h-4 inline mr-1"></i> ${text}`;
+                    updateNetworkProgress(id, true);
+                } else {
+                    obj.classList.remove('text-green-500');
+                    obj.innerHTML = text;
+                    updateNetworkProgress(id, false);
+                }
+            });
+            
+            consoleOutput.innerHTML += '<p class="text-blue-400">admin@network-lab:~$ _</p>';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            feather.replace();
+        }
+        
+        // Reset lab
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            if (confirm('Reset network topology and configurations?')) {
+                devices.forEach(device => {
+                    canvas.removeChild(device);
+                });
+                devices.length = 0;
+                
+                document.getElementById('console-output').innerHTML = '<p>Network lab reset. Ready for configuration.</p><p class="text-blue-400">admin@network-lab:~$ _</p>';
+                
+                document.querySelectorAll('.objective').forEach(obj => {
+                    obj.classList.remove('text-green-500');
+                    obj.innerHTML = obj.textContent;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
